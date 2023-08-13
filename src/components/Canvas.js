@@ -13,7 +13,6 @@ const Canvas = props => {
                 const newX = x + directionX;
                 const newY = y + directionY;
 
-                // Check for collision with canvas boundaries
                 if (newX < radius || newX > ctx.canvas.width - radius) {
                     circle.directionX *= -1;
                 }
@@ -36,7 +35,6 @@ const Canvas = props => {
         canvas.width = 400;
         canvas.height = 500;
 
-        //Our draw came here
         const render = () => {
             frameCount++
             draw(context, frameCount)
@@ -53,7 +51,7 @@ const Canvas = props => {
             radius: 10,
             x: Math.random() * canvasRef.current.width,
             y: Math.random() * canvasRef.current.height,
-            directionX: Math.random() * 2 - 1, // Random direction between -1 and 1
+            directionX: Math.random() * 2 - 1,
             directionY: Math.random() * 2 - 1
 
         };
