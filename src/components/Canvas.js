@@ -6,7 +6,7 @@ const Canvas = props => {
     const canvasRef = useRef(null)
 
     useEffect(() => {
-        const draw = (ctx, frameCount) => {
+        const draw = (ctx) => {
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
             circles.forEach((circle) => {
                 const { radius, x, y, directionX, directionY } = circle;
@@ -30,7 +30,7 @@ const Canvas = props => {
         }
         const canvas = canvasRef.current
         const context = canvas.getContext('2d')
-        let frameCount = 1
+        let frameCount = 0
         let animationFrameId
         canvas.width = 400;
         canvas.height = 500;
@@ -46,6 +46,8 @@ const Canvas = props => {
             window.cancelAnimationFrame(animationFrameId)
         }
     }, [circles])
+
+
     const addCircle = () => {
         const newCircle = {
             radius: 10,
@@ -66,10 +68,14 @@ const Canvas = props => {
 
     return (
         <div className='canvasContainer'>
-            <canvas className='canvasBlock' ref={canvasRef} {...props}></canvas>
-            <button onClick={addCircle}>Add Circle</button>
-            <button onClick={deleteCircle}>Delete Circle</button>
-            <button onClick={clearCanvas}>Clear zone</button>
+            <canvas className='canvasBlock' ref={canvasRef}></canvas>
+            <div className='buttonContainer'>
+                <button className='quantityBtn' onClick={addCircle}><span>&#43;</span></button>
+                <button className='clearBtn' onClick={clearCanvas}>Clear zone</button>
+                <button className='quantityBtn' onClick={deleteCircle}><span>&#8722;</span></button>
+
+            </div>
+
         </div>
     )
 }
