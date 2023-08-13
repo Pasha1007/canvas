@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.canvasBlock {
+  border: 2px solid black;
+}
+
+.canvasContainer {
+  display: flex;
+  flex-direction: column;
+}
