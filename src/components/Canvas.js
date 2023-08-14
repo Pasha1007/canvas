@@ -1,43 +1,41 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState, useCallback } from 'react'
 import '../App.css';
-const Canvas = props => {
+function Canvas() {
     const [circles, setCircles] = useState([]);
 
     const canvasRef = useRef(null)
+    const draw = useCallback((ctx) => {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+        circles.forEach((circle) => {
+            const { radius, x, y, directionX, directionY } = circle;
+            const newX = x + directionX;
+            const newY = y + directionY;
+
+            if (newX < radius || newX > ctx.canvas.width - radius) {
+                circle.directionX *= -1;
+            }
+            if (newY < radius || newY > ctx.canvas.height - radius) {
+                circle.directionY *= -1;
+            }
+
+            circle.x = newX;
+            circle.y = newY;
+            ctx.fillStyle = 'blue';
+            ctx.beginPath();
+            ctx.arc(newX, newY, radius, 0, 2 * Math.PI);
+            ctx.fill();
+        })
+    }, [circles]);
 
     useEffect(() => {
-        const draw = (ctx) => {
-            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-            circles.forEach((circle) => {
-                const { radius, x, y, directionX, directionY } = circle;
-                const newX = x + directionX;
-                const newY = y + directionY;
-
-                if (newX < radius || newX > ctx.canvas.width - radius) {
-                    circle.directionX *= -1;
-                }
-                if (newY < radius || newY > ctx.canvas.height - radius) {
-                    circle.directionY *= -1;
-                }
-
-                circle.x = newX;
-                circle.y = newY;
-                ctx.fillStyle = 'blue';
-                ctx.beginPath();
-                ctx.arc(newX, newY, radius, 0, 2 * Math.PI);
-                ctx.fill();
-            })
-        }
         const canvas = canvasRef.current
         const context = canvas.getContext('2d')
-        let frameCount = 0
         let animationFrameId
         canvas.width = 400;
         canvas.height = 500;
 
         const render = () => {
-            frameCount++
-            draw(context, frameCount)
+            draw(context)
             animationFrameId = window.requestAnimationFrame(render)
         }
         render()
@@ -45,7 +43,7 @@ const Canvas = props => {
         return () => {
             window.cancelAnimationFrame(animationFrameId)
         }
-    }, [circles])
+    }, [draw])
 
 
     const addCircle = () => {
